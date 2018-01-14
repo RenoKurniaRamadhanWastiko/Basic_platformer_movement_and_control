@@ -4,10 +4,10 @@ extends KinematicBody2D
 # var a = 2
 # var b = "text
 export var velocity = Vector2()
-export var speed = 2
+export var speed = 1
 export var Jump_force = 4
 export var Min_jump_force = 2
-export var max_speed = 3
+export var max_speed = 2
 export var gravity = 10
 var max_fall_speed = 15
 var face_dir = 1
@@ -19,9 +19,9 @@ var decelerate_time = .15
 var grounded
 var climb
 var climbing
+var climbing_speed = 0.5
 var on_ladder
-var current_anim = "Idle"
-var Playing_anim
+export var current_anim = "Idle"
 var jump_button_pressed
 var passable_platform
 
@@ -89,14 +89,16 @@ func _fixed_process(delta):
 		climbing = true
 		grounded = false
 		var pos = self.get_pos()
-		set_pos(Vector2(pos.x,(lerp(pos.y,pos.y-1,1))))
+		#set_pos(Vector2(pos.x,(lerp(pos.y,pos.y-1,1))))
+		movement.y = -climbing_speed
 		climb_animator()
 	#climb down handler
 	elif climb and Input.is_action_pressed("Input_Climb_Down"):
 		climbing = true
 		grounded = false
 		var pos = self.get_pos()
-		set_pos(Vector2(pos.x,(lerp(pos.y,pos.y+1,1))))
+		#set_pos(Vector2(pos.x,(lerp(pos.y,pos.y+1,1))))
+		movement.y = climbing_speed
 		climb_animator()
 	#animation handler for horizontal movemenet
 	elif climbing:
@@ -162,6 +164,6 @@ func fall_animator():
 
 #exporting func
 func center_position():
-	return get_pos() + get_node("CollisionShape2D").get_pos()
+	return get_pos()
 func facing_direction():
 	return face_dir

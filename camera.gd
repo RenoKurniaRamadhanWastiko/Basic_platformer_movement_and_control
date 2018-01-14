@@ -25,7 +25,7 @@ func _fixed_process(delta):
 	target_position_cam.y = lerp(get_pos().y,target_position_cam.y,y_smoothing)
 	if abs(target_position_cam.y - Player_target.center_position().y)>y_offset:
 		target_position_cam.y = Player_target.center_position().y + (sign(target_position_cam.y-Player_target.center_position().y))*y_offset
-	#set_pos(Vector2(round(target_position_cam.x),round(target_position_cam.y)))
+#	set_pos(Vector2(round(target_position_cam.x),round(target_position_cam.y)))
 	set_pos(target_position_cam)
 
 		
