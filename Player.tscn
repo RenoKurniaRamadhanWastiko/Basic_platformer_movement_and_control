@@ -1,0 +1,160 @@
+[gd_scene load_steps=10 format=1]
+
+[ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://characters.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 6.05676, 11.5023 )
+
+[sub_resource type="Animation" id=2]
+
+length = 1.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ 46 ]
+}
+
+[sub_resource type="Animation" id=5]
+
+resource/name = "Idle_climb"
+length = 1.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ 68 ]
+}
+
+[sub_resource type="Animation" id=4]
+
+resource/name = "climb"
+length = 0.4
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": FloatArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 65, 66, 67, 68 ]
+}
+
+[sub_resource type="Animation" id=7]
+
+resource/name = "fall"
+length = 1.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ 55 ]
+}
+
+[sub_resource type="Animation" id=6]
+
+resource/name = "jump_anim"
+length = 0.01
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ 50 ]
+}
+
+[sub_resource type="Animation" id=3]
+
+length = 0.4
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": FloatArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 46, 47, 48, 49 ]
+}
+
+[node name="Player" type="KinematicBody2D"]
+
+transform/pos = Vector2( -0.583969, -0.291985 )
+input/pickable = false
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 0.931809, 0, 0, 1, 0.886482, 0 )
+shapes/0/trigger = false
+collision/layers = 1
+collision/mask = 1
+collision/margin = 0.08
+script/script = ExtResource( 1 )
+velocity = Vector2( 0, 0 )
+speed = 2
+Jump_force = 4
+max_speed = 3
+gravity = 10
+
+[node name="Sprite" type="Sprite" parent="."]
+
+transform/pos = Vector2( 0.583977, -3.21188 )
+texture = ExtResource( 2 )
+vframes = 4
+hframes = 23
+frame = 56
+
+[node name="animate" type="AnimationPlayer" parent="."]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/Idle = SubResource( 2 )
+anims/Idle_climb = SubResource( 5 )
+anims/climb = SubResource( 4 )
+anims/fall = SubResource( 7 )
+anims/jump_anim = SubResource( 6 )
+anims/walk = SubResource( 3 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = "Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+transform/pos = Vector2( 0.886482, 0 )
+transform/scale = Vector2( 0.931809, 1 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+
