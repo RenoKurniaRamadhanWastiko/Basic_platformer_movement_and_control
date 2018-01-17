@@ -6,13 +6,15 @@ extends Node2D
 onready var Player_node = get_node("Player")
 onready var Player_node_animation = get_node("Player/animate")
 onready var Camera_notification =  get_node("Camera/Notification")
+
 var paused = false
 var pause_button_pressed = false
 
 func _ready():
+
 	# Called every time the node is added to the scene.
 	# Initialization here
-	set_process(true)
+	set_process(true) 
 func _process(delta):
 	if Input.is_action_pressed("Pause") and not pause_button_pressed:
 		pause_button_pressed = true

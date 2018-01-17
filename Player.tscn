@@ -1,7 +1,10 @@
-[gd_scene load_steps=10 format=1]
+[gd_scene load_steps=17 format=1]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://characters.png" type="Texture" id=2]
+[ext_resource path="res://SwordArea.gd" type="Script" id=3]
+[ext_resource path="res://SwordArea2.gd" type="Script" id=4]
+[ext_resource path="res://sword.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -108,12 +111,56 @@ tracks/0/keys = {
 "values": [ 46, 47, 48, 49 ]
 }
 
+[sub_resource type="RectangleShape2D" id=8]
+
+custom_solver_bias = 0.0
+extents = Vector2( 10, 38.5772 )
+
+[sub_resource type="RectangleShape2D" id=9]
+
+custom_solver_bias = 0.0
+extents = Vector2( 10, 38.7625 )
+
+[sub_resource type="Animation" id=10]
+
+resource/name = "Switch"
+length = 0.2
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform/pos")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0, 0.2 ),
+"transitions": FloatArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -15.3037, 0.593167 ), Vector2( 15.3055, 0.593167 ) ]
+}
+
+[sub_resource type="Animation" id=11]
+
+resource/name = "switchb"
+length = 0.2
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform/pos")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0, 0.2 ),
+"transitions": FloatArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 15.3055, 0.593167 ), Vector2( -15.3037, 0.593167 ) ]
+}
+
 [node name="Player" type="KinematicBody2D"]
 
 transform/pos = Vector2( -0.583969, -0.291985 )
 input/pickable = false
 shapes/0/shape = SubResource( 1 )
-shapes/0/transform = Matrix32( 0.931809, 0, 0, 1, 0.886482, 0 )
+shapes/0/transform = Matrix32( 0.931809, 0, 0, 0.999811, 0.886482, -0.00274551 )
 shapes/0/trigger = false
 collision/layers = 1
 collision/mask = 1
@@ -125,6 +172,7 @@ Jump_force = 4
 Min_jump_force = 2
 max_speed = 3
 gravity = 10
+current_anim = "Idle"
 
 [node name="Sprite" type="Sprite" parent="."]
 
@@ -152,10 +200,94 @@ autoplay = "Idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
-transform/pos = Vector2( 0.886482, 0 )
-transform/scale = Vector2( 0.931809, 1 )
+transform/pos = Vector2( 0.886482, -0.00274551 )
+transform/scale = Vector2( 0.931809, 0.999811 )
 shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 0
 
+[node name="Sword_Area" type="Area2D" parent="."]
 
+transform/pos = Vector2( 9.03742, -6.89698 )
+input/pickable = true
+shapes/0/shape = SubResource( 8 )
+shapes/0/transform = Matrix32( 0.236181, 0, 0, 0.236181, -24.5057, 7.15366 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+script/script = ExtResource( 3 )
+docked = true
+Area_A_entered = false
+
+[node name="Dock1" type="CollisionShape2D" parent="Sword_Area"]
+
+transform/pos = Vector2( -24.5057, 7.15366 )
+transform/scale = Vector2( 0.236181, 0.236181 )
+shape = SubResource( 8 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Timer" type="Timer" parent="Sword_Area"]
+
+process_mode = 1
+wait_time = 0.2
+one_shot = false
+autostart = false
+
+[node name="Sword_Area_b" type="Area2D" parent="."]
+
+transform/pos = Vector2( -0.31556, -0.631118 )
+input/pickable = true
+shapes/0/shape = SubResource( 9 )
+shapes/0/transform = Matrix32( 0.239672, -0.00252589, 0.00252589, 0.239672, 15.3389, 0.752137 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+script/script = ExtResource( 4 )
+docked = false
+Area_B_entered = false
+
+[node name="Dock2" type="CollisionShape2D" parent="Sword_Area_b"]
+
+transform/pos = Vector2( 15.3389, 0.752137 )
+transform/rot = 0.603815
+transform/scale = Vector2( 0.239685, 0.239685 )
+shape = SubResource( 9 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Timer" type="Timer" parent="Sword_Area_b"]
+
+process_mode = 1
+wait_time = 0.2
+one_shot = false
+autostart = false
+
+[node name="sword" parent="." instance=ExtResource( 5 )]
+
+transform/pos = Vector2( -15.364, -0.348899 )
+transform/scale = Vector2( 0.198886, 0.317507 )
+
+[node name="AnimationPlayer" parent="sword"]
+
+anims/Switch = SubResource( 10 )
+anims/switchb = SubResource( 11 )
+
+[connection signal="body_enter" from="Sword_Area" to="Sword_Area" method="_on_Sword_Area_body_enter"]
+
+[connection signal="body_exit" from="Sword_Area" to="Sword_Area" method="_on_Sword_Area_body_exit"]
+
+[connection signal="timeout" from="Sword_Area/Timer" to="Sword_Area" method="_on_Timer_timeout"]
+
+[connection signal="body_enter" from="Sword_Area_b" to="Sword_Area_b" method="_on_Sword_Area_b_body_enter"]
+
+[connection signal="body_exit" from="Sword_Area_b" to="Sword_Area_b" method="_on_Sword_Area_b_body_exit"]
+
+[connection signal="timeout" from="Sword_Area_b/Timer" to="Sword_Area_b" method="_on_Timer_timeout"]
+
+
+[editable path="sword"]

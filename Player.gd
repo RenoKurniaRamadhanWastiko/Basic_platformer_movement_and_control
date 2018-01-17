@@ -27,6 +27,9 @@ var passable_platform
 
 onready var animate = get_node("animate")
 onready var sprite = get_node("Sprite")
+onready var Sword_A = get_node("Sword_Area")
+onready var Sword_B = get_node("Sword_Area_b")
+
 
 func _ready():
 	accelarate_time_step = speed/accelarate_time
@@ -50,6 +53,8 @@ func _fixed_process(delta):
 		sprite.set_flip_h(1)
 		if grounded:
 			walk_animator()
+		if not Sword_B.docked and not Sword_B.Area_B_entered:
+			Sword_A.Switch_side()
 	elif Input.is_action_pressed("Input_Right"):
 		movement.x +=accelarate_time_step*delta
 		if movement.x>max_speed:
@@ -58,6 +63,8 @@ func _fixed_process(delta):
 		sprite.set_flip_h(0)
 		if grounded:
 			walk_animator()
+		if not Sword_A.docked and not Sword_A.Area_A_entered:
+			Sword_B.Switch_side()
 	elif movement.x !=0:
 		var decelerate = -1*face_dir*delta*decelerate_time_step
 		movement.x += decelerate	
@@ -167,3 +174,7 @@ func center_position():
 	return get_pos()
 func facing_direction():
 	return face_dir
+
+func _on_Sword_Area_body_enter( body ):
+	if body.is_in_group("Passable"):
+		print("asss111")
